@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-
+using BCrypt.Net;
 namespace LibraryAPI.Data.Context;
 
 public class LibraryDbContext : DbContext
@@ -58,5 +58,49 @@ public class LibraryDbContext : DbContext
 
             entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
         });
+
+
+
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                Username = "admin",
+                Email = "admin@library.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+                Role = "Librarian"
+            },
+            new User
+            {
+                Id = 2,
+                Username = "john",
+                Email = "john@library.com",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Client@123"),
+                Role = "Client"
+            }
+        );
+
+        modelBuilder.Entity<Book>().HasData(
+    new Book
+    {
+        Id = 1,
+        Title = "Clean Code",
+        Author = "Robert C. Martin",
+        ISBN = "9780132350884",
+        TotalCopies = 5,
+        AvailableCopies = 5
+    },
+    new Book
+    {
+        Id = 2,
+        Title = "Design Patterns",
+        Author = "GoF",
+        ISBN = "9780201633610",
+        TotalCopies = 3,
+        AvailableCopies = 3
+    }
+);
+
+
     }
 }
